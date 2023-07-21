@@ -34,6 +34,7 @@ import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.plans.logical.{LocalRelation, LogicalPlan}
+import org.apache.spark.sql.delta.util.DeltaShufflePartitionsUtil
 import org.apache.spark.sql.connector.catalog._
 import org.apache.spark.sql.execution._
 import org.apache.spark.sql.execution.datasources.{BasicWriteJobStatsTracker, FileFormatWriter, HadoopFsRelation, LogicalRelation, WriteJobStatsTracker}
@@ -382,8 +383,9 @@ trait TransactionalWrite extends DeltaLogging { self: OptimisticTransactionImpl 
         partitioningColumns, constraints)
       val optimizeWritePlan =
         applyOptimizeWriteIfNeeded(spark, empty2NullPlan, partitionSchema, isOptimize)
+
       val physicalPlan = DeltaInvariantCheckerExec(optimizeWritePlan, constraints)
-      
+
       val statsTrackers: ListBuffer[WriteJobStatsTracker] = ListBuffer()
 
       if (spark.conf.get(DeltaSQLConf.DELTA_HISTORY_METRICS_ENABLED)) {
