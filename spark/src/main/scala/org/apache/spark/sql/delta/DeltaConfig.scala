@@ -397,6 +397,16 @@ trait DeltaConfigsBase extends DeltaLogging {
     "needs to be a boolean.")
 
   /**
+   * Whether this table will automagically optimize the layout of files while writing data.
+   */
+  val OPTIMIZE_WRITE = buildConfig[Boolean](
+    "autoOptimize.optimizeWrite",
+    "false",
+    _.toBoolean,
+    _ => true,
+    "needs to be a boolean.")
+
+  /**
    * If true, a delta table can be rolled back to any point within LOG_RETENTION. Leaving this on
    * requires converting the oldest delta file we have into a checkpoint, which we do once a day. If
    * doing that operation is too expensive, it can be turned off, but the table can only be rolled
