@@ -670,6 +670,16 @@ trait DeltaConfigsBase extends DeltaLogging {
     _ => true,
     "needs to be a boolean."
   )
+
+  /**
+   * Enable auto compaction.
+   */
+  val AUTO_COMPACT = buildConfig[Boolean](
+    "autoOptimize.autoCompact",
+    "false",
+    _.toBoolean,
+    _ => true,
+    "needs to be a boolean.")
 }
 
 object DeltaConfigs extends DeltaConfigsBase
